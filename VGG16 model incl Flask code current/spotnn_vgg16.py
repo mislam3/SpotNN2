@@ -7,7 +7,7 @@ Original file is located at
     https://colab.research.google.com/drive/1-Bt3h3w5yOsWca_JaB3zqalcz09UfASz
 
 @author: Md Siamul Islam
-# Parking Spot Vacancy/Occupancy recognition deep NN solution-VGG16
+# Parking Spot Vacancy/Occupancy Recognition Solution- Deep Convolutional Neural Network -VGG16
 """
 
 # pre-req (if required)
