@@ -287,7 +287,7 @@ and model reconstructions from JSON
 
 # model2.load_weights('vgg16_model_weights.h5')
 
-"""# Deploy Model to Web Service- Using Flask
+"""# Deploy Model to Web Service- Using Flask --continue to next- ignore
 
 Ignore next code block --continue from predict_app.py
 """
@@ -363,11 +363,17 @@ Ignore next code block --continue from predict_app.py
 # from flask import jsonify
 # from flask import Flask
 
-"""## predict_app.py"""
+"""# Deploy Model to Web Service- Using Flask
+# predict_app.py
+### Modify as required for FrontEnd/BackEnd spec 
+### Follow instructions to execute successfully -in.prog
+"""
 
 # predict_app.py
 # Build backend Flask application to host VGG16 model for predictions
 # under flask_apps directory, create predict_app.py file containing code for web service. Place vgg16 model in form of .h5 file within this dir.
+
+# Modify as required for FrontEnd/BackEnd spec
 
 
 #code for predict app
@@ -398,29 +404,47 @@ def preprocess_image(image, target_size):
   if image.mode != "RGB":
       image = image.convert("RGB")
   image = image.resize(target_size)
-  image = img_to_array(image)
-  image= np.expand_dims(image, axis=0)
+  image = img_to_array(image)   # to numpy array
+  image= np.expand_dims(image, axis=0)  # expands the dimensions of img
 
-  return image
+  return image    # preprocessed image returned to be passed to keras model
+
 
 print(" * Loading VGG16 Keras model...")
-get_model()
+get_model()  # model loaded into memory - doesn't require reloading every time a request comes into endpoint
 
 
-@app.route("/predict", methods=["POST"])
+@app.route("/predict", methods=["POST"])   # Endpoint: "/predict"  -image data sent to endpoint to GET prediction
 def predict():
     message = request.get_json(force=True)
-    encoded = message['image']
-    decoded = base64.b64decode(encoded)
-    image = Image.open(io.BytesIO(decoded))
-    processed_image = preprocess_image(image, target_size=(224,224))
+    encoded = message['image']  # encoded assigned value associated with key called image json data stored in message variable -atleast one (key,value) pair where key = image, value associated with key is base64 encoded image sent by client
+    decoded = base64.b64decode(encoded) # now decoded assigned decoded img data
+    image = Image.open(io.BytesIO(decoded))  # image object with the decoded message
+    processed_image = preprocess_image(image, target_size=(224,224))   # preprocess then pass it to model for prediction
 
-    prediction = model.predict(processed_image).tolist()
+    prediction = model.predict(processed_image).tolist()   # returns numpy array with predictions
 
+# send this prediction as JSON back to the client
     response = {
-        'prediction':{
-            'empty': prediction[0][0],
-            'occupied': prediction[0][1]
-        } 
+        'prediction':{     # dictionary with key called prediction
+            'empty': prediction[0][0],  # empty key set to 0th element of 0th list of prediction list
+            'occupied': prediction[0][1]    # occupied key set to 1st element of 0th list of prediction list
+        }    # only 1 image predicted, so prediction list contains only 1 embedded list with probability for empty and probability for occupied
     }
-    return jsonify(response)
+    return jsonify(response)    # converts python dictionary to JSON--return JSON to FrontEnd
+
+
+# type into powershell/.../...
+
+# ~/flask_apps$ export FLASK_APP=predict_app.py
+# ~/flask_apps$ flask run --host=0.0.0.0
+
+# output:
+# Using XXXX backend.
+# * Loading Keras model...
+# * Model loaded!
+# * Serving Flask app "predict_app"
+# * Running on http://0.0.0.0:5000/ (press CTRL+C to quit)
+
+"""# Make the Front-End Web App to call the predict endpoint"""
+
