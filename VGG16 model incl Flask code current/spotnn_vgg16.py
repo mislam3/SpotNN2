@@ -372,7 +372,7 @@ Ignore next code block --continue from predict_app.py
 # predict_app.py
 # Build backend Flask application to host VGG16 model for predictions
 # under flask_apps directory, create predict_app.py file containing code for web service. Place vgg16 model in form of .h5 file within this dir.
-
+# may organize front end files here in appropriate directories and specify/mod paths in code
 # Modify as required for FrontEnd/BackEnd spec
 
 
@@ -445,6 +445,40 @@ def predict():
 # * Model loaded!
 # * Serving Flask app "predict_app"
 # * Running on http://0.0.0.0:5000/ (press CTRL+C to quit)
+
+
+# For Powershell in windows machines: 
+# Powershell: Access image >>Format image data >>Make HTTP POST request >>Get Response for img
+# PS C:\imgs> $fileName = 'C:\pics\empty3.PNG'
+# PS C:\imgs> $bytes = [IO.File]::ReadyAllBytes($fileName)
+# PS C:\imgs> $base64Image = [Convert]::ToBase64String($bytes)
+# PS C:\imgs> $message = @{ image = $base64Image }
+# PS C:\imgs> $jsonified = ConvertTo-Json $message
+# PS C:\imgs> $response = Invoke-RestMethod -Method Post -Url "http"//??.?.?.?:5000/predict" -Body $jsonified
+# PS C:\imgs> $response.prediction | format-list
+
+# sample output:
+
+# empty:    X.XXXXXXXXXXXE-XX
+# occupied: X.XXXXXXXXXXXXXXX
+
+# or Curl to use with Bash terminal:
+# ..MINGW64 /c/imgs
+# $ fileName=C\:/imgs/empty3.PNG
+# ..MINGW64 /c/imgs
+# $ base64Image=$(base64 $fileName)
+# ..MINGW64 /c/imgs
+# $ jsonified="{\"image\":\"${base64Image}\"}"
+# ..MINGW64 /c/imgs
+# $ echo $jsonified >> data.json
+# ..MINGW64 /c/imgs
+# $curl -X POST --data @data.json http://??.?.?.?:5000/predict
+
+# sample output:
+# .
+# .
+# .
+# .
 
 """# Make the Front-End Web App to call the predict endpoint"""
 
