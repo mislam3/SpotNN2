@@ -1,0 +1,3 @@
+Model built with VGG16
+
+includes Flask web service code- follow instructions: create separate file as mentioned
