@@ -1,2 +1,2 @@
 # SpotNN2
-SpotNN2 ML Model
+SpotNN2 ML Models
